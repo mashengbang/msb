@@ -1,0 +1,26 @@
+#Version 0.0.1
+FROM ubuntu:14.04
+MAINTAINER mashengbang
+ENV REFRESHED_AT 2015-7-25
+
+RUN apt-get update
+RUN apt-get install tomcat7 default-jdk -y
+
+# 设置JAVA_HOME环境变量
+RUN update-alternatives --display java
+ENV JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+ENV CATALINA_BASE=/var/lib/tomcat7
+RUN echo "JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64">> /etc/environment
+RUN echo "JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64">> /etc/default/tomcat7
+
+RUN mkdir /usr/share/tomcat7/common
+RUN mkdir /usr/share/tomcat7/server
+RUN mkdir /usr/share/tomcat7/shared
+
+RUN mkdir /usr/share/tomcat7/common/classes
+RUN mkdir /usr/share/tomcat7/server/classes
+RUN mkdir /usr/share/tomcat7/shared/classes
+# 容器需要开放Tomcat 8080端口
+EXPOSE 8080
+
+ENTRYPOINT [ "/usr/share/tomcat7/bin/catalina.sh","run" ]
